@@ -9,18 +9,25 @@ def check_password():
 
     if not st.session_state["password_correct"]:
         st.markdown("""
-        <div style='text-align: right; direction: rtl; background-color: #FFF7ED; padding: 20px; border-radius: 12px; border: 1px solid #FFEDD5; max-width: 400px; margin: auto; margin-top: 50px; box-shadow: 0 4px 15px rgba(249, 115, 22, 0.05);'>
-            <h2 style='color: #EA580C; margin-bottom: 15px;'>🔒 כניסה למערכת</h2>
+        <div style='text-align: right; direction: rtl; background-color: #FFFFFF; padding: 40px; border-radius: 16px; border: 1px solid #E2E8F0; max-width: 450px; margin: 80px auto 0; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);'>
+            <div style='display: flex; justify-content: center; margin-bottom: 20px;'>
+                <span style='font-size: 48px;'>🔒</span>
+            </div>
+            <h2 style='color: #1E293B; margin-bottom: 10px; font-weight: 800; text-align: center; font-family: "Heebo", sans-serif;'>כניסה למערכת</h2>
+            <p style='color: #64748B; text-align: center; margin-bottom: 30px; font-size: 1.1rem; font-family: "Heebo", sans-serif;'>אנא הזן את סיסמת הגישה כדי להמשיך</p>
         </div>
         """, unsafe_allow_html=True)
         
-        password = st.text_input("הזן סיסמת גישה:", type="password", key="pwd")
-        if password:
-            if password == "Scooper2026!":  
-                st.session_state["password_correct"] = True
-                st.rerun()  
-            else:
-                st.error("סיסמה שגויה. אנא נסה שוב.")
+        # שימוש בעמודות כדי למרכז את שדה הסיסמה
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            password = st.text_input("הזן סיסמת גישה:", type="password", key="pwd", label_visibility="collapsed", placeholder="הקלד סיסמה כאן...")
+            if password:
+                if password == "Scooper2026!":  
+                    st.session_state["password_correct"] = True
+                    st.rerun()  
+                else:
+                    st.error("סיסמה שגויה. אנא נסה שוב.")
         return False
     return True
 
@@ -29,77 +36,129 @@ if not check_password():
     st.stop()
 
 # ==========================================
-# 1. הגדרות מערכת ועיצוב RTL מותאם לממשק (Yellow-Orange-White Theme)
+# 1. הגדרות מערכת ועיצוב RTL פרימיום מותאם אישית
 # ==========================================
 st.set_page_config(page_title="Raz Analytics - Report Assistant", page_icon="⚡", layout="wide")
 
 st.markdown("""
 <style>
-    /* הגדרות כיווניות עברית */
+    /* ייבוא פונט Heebo מ-Google Fonts לקריאות אופטימלית ומראה מודרני */
+    @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&display=swap');
+
+    /* הגדרות כלליות */
     .stApp, .stMarkdown, p, h1, h2, h3, h4, h5, h6, label, li, span { 
         direction: rtl; 
         text-align: right !important; 
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Heebo', sans-serif !important;
     }
     
-    /* רקע כללי לבן-נקי */
+    /* רקע כללי - גוון אפור-כחלחל סופר עדין (Slate 50) למראה SaaS מתקדם */
     .stApp {
-        background-color: #FAFAFA;
+        background-color: #F8FAFC;
     }
     
-    /* תפריט הצד - גוון שמנת עדין עם מסגרת צהובה */
+    /* תפריט הצד - לבן נקי עם הצללה ומסגרת מינימליסטית */
     [data-testid="stSidebar"] { 
-        background-color: #FFFCF2;
-        border-left: 1px solid #FEF08A;
+        background-color: #FFFFFF !important;
+        border-left: 1px solid #E2E8F0;
+        box-shadow: -4px 0 15px rgba(0, 0, 0, 0.02);
     }
     
-    /* צבע טקסט כללי בתפריט הצד - אפור כהה/כחלחל לקריאות מקסימלית */
+    /* צבעי טקסט - אפור פחם לקריאות גבוהה ללא אימוץ עיניים */
     [data-testid="stSidebar"] * {
         color: #334155 !important;
     }
     
-    /* יישור תיבות בחירה וטקסט */
-    .stSelectbox div, .stTextInput div { direction: rtl; text-align: right; }
+    /* תיבות בחירה וטקסט (Inputs) */
+    .stSelectbox div, .stTextInput div { 
+        direction: rtl; 
+        text-align: right; 
+    }
+    .stSelectbox>div>div>div, .stTextInput>div>div>input {
+        background-color: #FFFFFF;
+        border: 1px solid #CBD5E1;
+        border-radius: 8px;
+        color: #1E293B;
+    }
+    .stSelectbox>div>div>div:focus-within, .stTextInput>div>div>input:focus {
+        border-color: #F97316 !important;
+        box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2) !important;
+    }
     
-    /* עיצוב כפתור ההעתקה ובלוק הקוד - מראה הייטקי מואר */
+    /* עיצוב כפתורי ניווט בסרגל הצד (Radio Buttons) - מראה תפריט SaaS צדדי */
+    div[role="radiogroup"] {
+        gap: 8px;
+    }
+    div[role="radiogroup"] > label {
+        padding: 12px 16px;
+        background-color: #FFFFFF;
+        border: 1px solid #F1F5F9;
+        border-radius: 8px;
+        margin-bottom: 4px;
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+    div[role="radiogroup"] > label:hover {
+        background-color: #F8FAFC;
+        border-color: #E2E8F0;
+        transform: translateX(-3px);
+    }
+    /* עיצוב המצב הלחוץ/פעיל של הרדיו באטון בעזרת CSS מתקדם */
+    div[role="radiogroup"] > label:has(input:checked) {
+        background-color: #FFF7ED !important;
+        border: 1px solid #FFEDD5 !important;
+        border-right: 4px solid #F97316 !important;
+        box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.1);
+    }
+    div[role="radiogroup"] > label:has(input:checked) p {
+        color: #C2410C !important;
+        font-weight: 700 !important;
+    }
+    
+    /* עיצוב כפתור ההעתקה ובלוק הקוד - פרימיום */
     div[data-testid="stCodeBlock"] { 
-        direction: ltr; 
+        direction: ltr; /* משאיר את כפתור ההעתקה למעלה מימין */
         text-align: left; 
         background-color: #FFFFFF; 
         border-radius: 12px; 
-        border: 1px solid #FDE047; 
-        box-shadow: 0 4px 15px rgba(250, 204, 21, 0.08);
-        padding: 5px;
+        border: 1px solid #E2E8F0; 
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        padding: 8px;
+        transition: border-color 0.2s;
+    }
+    div[data-testid="stCodeBlock"]:hover {
+        border-color: #FACC15;
+    }
+    div[data-testid="stCodeBlock"] pre {
+        background-color: transparent;
     }
     div[data-testid="stCodeBlock"] code { 
         direction: rtl; 
         text-align: right; 
         color: #1E293B; 
         font-size: 1.05rem;
-        line-height: 1.6;
+        line-height: 1.7;
+        font-family: 'Heebo', monospace; /* משלב נראות קוד עם קריאות עברית */
     }
     
-    /* עיצוב כפתורי ניווט בסרגל הצד (Radio Buttons) */
-    div[role="radiogroup"] > label {
-        padding: 12px 15px;
-        background-color: #FFFFFF;
-        border: 1px solid #FEF08A;
-        border-radius: 8px;
-        margin-bottom: 8px;
-        transition: all 0.2s ease-in-out;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-        cursor: pointer;
-    }
-    div[role="radiogroup"] > label:hover {
-        background-color: #FEF08A;
-        border-color: #FACC15;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(250, 204, 21, 0.15);
-    }
-    
-    /* התאמת קו מפריד */
+    /* קו מפריד נקי */
     hr {
-        border-color: #FEF08A !important;
+        border-color: #E2E8F0 !important;
+        margin: 24px 0 !important;
+    }
+    
+    /* התאמת צבע כפתור ההעתקה */
+    button[title="Copy to clipboard"] {
+        background-color: #F8FAFC !important;
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 6px !important;
+    }
+    button[title="Copy to clipboard"]:hover {
+        background-color: #FEF08A !important;
+        border-color: #FACC15 !important;
+        color: #CA8A04 !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -111,19 +170,19 @@ st.markdown("""
 
 # --- סרגל צד (Sidebar) ---
 with st.sidebar:
-    # כותרת המערכת החדשה בעיצוב גרדיאנט
+    # כותרת מערכת חדשה - טייפוגרפיה חזקה וגרדיאנט יוקרתי
     st.markdown("""
-    <div style='margin-bottom: 25px;'>
-        <h1 style='text-align: right; background: -webkit-linear-gradient(45deg, #EA580C, #FACC15); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; margin-bottom: 0; font-size: 2.2rem;'>Raz Analytics</h1>
-        <span style='color: #64748B; font-size: 1.1rem; font-weight: 600; letter-spacing: 0.5px;'>Report Assistant</span>
+    <div style='margin-bottom: 30px; padding: 10px 0;'>
+        <h1 style='text-align: right; background: linear-gradient(135deg, #F97316 0%, #F59E0B 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; margin-bottom: 5px; font-size: 2.2rem; letter-spacing: -0.5px;'>Raz Analytics</h1>
+        <span style='color: #64748B; font-size: 1rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase;'>Report Assistant</span>
     </div>
     """, unsafe_allow_html=True)
     
-    # אזור בחירות (לקוח, חודש)
-    st.markdown("<span style='color: #64748B; font-size: 0.9rem; font-weight: bold;'>שם הלקוח</span>", unsafe_allow_html=True)
+    # אזור בחירות (לקוח, חודש) עם תגיות מעוצבות
+    st.markdown("<p style='color: #475569; font-size: 0.9rem; font-weight: 700; margin-bottom: 5px;'>🏢 לקוח</p>", unsafe_allow_html=True)
     client_selected = st.selectbox(" ", ["קבוצת עזריאלי", "קוקה-קולה (CBC) (בקרוב)"], label_visibility="collapsed")
     
-    st.markdown("<span style='color: #64748B; font-size: 0.9rem; font-weight: bold;'>חודש הדוח</span>", unsafe_allow_html=True)
+    st.markdown("<p style='color: #475569; font-size: 0.9rem; font-weight: 700; margin-bottom: 5px; margin-top: 15px;'>📅 חודש הדוח</p>", unsafe_allow_html=True)
     month_selected = st.text_input(" ", "מאי 2026", label_visibility="collapsed")
     
     st.markdown("<hr>", unsafe_allow_html=True)
@@ -132,15 +191,23 @@ with st.sidebar:
     selected_step_key = None
     if client_selected == "קבוצת עזריאלי":
         step_keys = list(azrieli_workflow.keys())
-        st.markdown("<span style='color: #64748B; font-size: 0.95rem; font-weight: bold;'>התקדמות העבודה</span>", unsafe_allow_html=True)
+        st.markdown("<p style='color: #475569; font-size: 1rem; font-weight: 800; margin-bottom: 15px;'>🔄 תוכנית עבודה</p>", unsafe_allow_html=True)
         selected_step_key = st.radio(" ", step_keys, label_visibility="collapsed")
         
-        # חישוב התקדמות ויזואלי (X מתוך 11) - בצבע כתום מעוצב
+        # חישוב התקדמות ויזואלי - עיצוב יוקרתי ונקי
         current_idx = step_keys.index(selected_step_key) + 1
         total_steps = len(step_keys)
+        progress_percentage = int((current_idx / total_steps) * 100)
+        
         st.markdown(f"""
-        <div style='margin-top: 15px; padding: 10px; background-color: #FFF7ED; border-radius: 8px; text-align: center; border: 1px dashed #FDBA74;'>
-            <span style='color: #EA580C; font-weight: bold; font-size: 1.1rem;'>שלב {current_idx} מתוך {total_steps}</span>
+        <div style='margin-top: 30px; padding: 20px 15px; background-color: #FFFFFF; border-radius: 12px; border: 1px solid #F1F5F9; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);'>
+            <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;'>
+                <span style='color: #64748B; font-size: 0.85rem; font-weight: 600;'>התקדמות</span>
+                <span style='color: #EA580C; font-weight: 700; font-size: 0.9rem;'>{current_idx} / {total_steps}</span>
+            </div>
+            <div style='width: 100%; background-color: #F1F5F9; border-radius: 999px; height: 6px;'>
+                <div style='background: linear-gradient(90deg, #F97316, #FACC15); width: {progress_percentage}%; height: 6px; border-radius: 999px;'></div>
+            </div>
         </div>
         """, unsafe_allow_html=True)
     else:
@@ -151,12 +218,14 @@ if client_selected == "קבוצת עזריאלי" and selected_step_key:
     step_data = azrieli_workflow[selected_step_key]
     
     # כותרת עליונה של השלב
-    st.markdown(f"<h4 style='color: #F59E0B; font-weight: 600; margin-bottom: 0;'>שקף {current_idx} / {total_steps}</h4>", unsafe_allow_html=True)
-    st.markdown(f"<h1 style='color: #0F172A; font-weight: 800; margin-top: 5px;'>{step_data['title']}</h1>", unsafe_allow_html=True)
-    
-    st.markdown("<hr style='margin-top: 10px; margin-bottom: 30px;'>", unsafe_allow_html=True)
-    
-    # עיצוב מותאם אישית לתיבות המידע במקום st.info/st.warning הבסיסיים
+    st.markdown(f"""
+    <div style='margin-bottom: 30px;'>
+        <span style='background-color: #FFF7ED; color: #EA580C; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; border: 1px solid #FFEDD5;'>שלב {current_idx} מתוך {total_steps}</span>
+        <h1 style='color: #0F172A; font-weight: 800; font-size: 2.5rem; margin-top: 15px; margin-bottom: 0;'>{step_data['title']}</h1>
+    </div>
+    """, unsafe_allow_html=True)
+        
+    # עיצוב מותאם אישית לתיבות המידע - כרטיסיות מודרניות
     files_needed_formatted = step_data['files_needed'].replace('\n', '<br>')
     instructions_formatted = step_data['instructions'].replace('\n', '<br>')
     
@@ -164,24 +233,34 @@ if client_selected == "קבוצת עזריאלי" and selected_step_key:
     
     with col_info1:
         st.markdown(f"""
-        <div style="background-color: #FFFBEB; border-right: 5px solid #FACC15; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); height: 100%;">
-            <h4 style="color: #CA8A04; margin-top: 0; display: flex; align-items: center; gap: 8px;">📂 קבצים נדרשים:</h4>
-            <p style="color: #334155; margin-bottom: 0; font-size: 1.05rem; line-height: 1.5;">{files_needed_formatted}</p>
+        <div style="background-color: #FFFFFF; border: 1px solid #E2E8F0; border-right: 4px solid #FACC15; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.02); height: 100%;">
+            <h4 style="color: #0F172A; font-weight: 700; margin-top: 0; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; font-size: 1.1rem;">
+                <span style="font-size: 1.3rem;">📂</span> קבצים נדרשים
+            </h4>
+            <p style="color: #475569; margin-bottom: 0; font-size: 1.05rem; line-height: 1.6;">{files_needed_formatted}</p>
         </div>
         """, unsafe_allow_html=True)
         
     with col_info2:
         st.markdown(f"""
-        <div style="background-color: #FFF7ED; border-right: 5px solid #F97316; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); height: 100%;">
-            <h4 style="color: #C2410C; margin-top: 0; display: flex; align-items: center; gap: 8px;">📋 הנחיות לאנליסט:</h4>
-            <p style="color: #334155; margin-bottom: 0; font-size: 1.05rem; line-height: 1.5;">{instructions_formatted}</p>
+        <div style="background-color: #FFFFFF; border: 1px solid #E2E8F0; border-right: 4px solid #F97316; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.02); height: 100%;">
+            <h4 style="color: #0F172A; font-weight: 700; margin-top: 0; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; font-size: 1.1rem;">
+                <span style="font-size: 1.3rem;">📋</span> הנחיות לאנליסט
+            </h4>
+            <p style="color: #475569; margin-bottom: 0; font-size: 1.05rem; line-height: 1.6;">{instructions_formatted}</p>
         </div>
         """, unsafe_allow_html=True)
     
-    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("<br><br>", unsafe_allow_html=True)
     
-    st.markdown("<h3 style='color: #0F172A;'>🤖 פרומפט לשליחה למודל</h3>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #64748B; font-size: 1.05rem;'>העתק את הטקסט בתיבה מטה (באמצעות סמל ההעתקה בצד ימין למעלה של התיבה) והדבק אותו במודל ה-AI יחד עם הקבצים הנדרשים.</p>", unsafe_allow_html=True)
+    st.markdown("""
+    <div style="margin-bottom: 15px;">
+        <h3 style='color: #0F172A; font-weight: 800; font-size: 1.5rem; display: inline-flex; align-items: center; gap: 10px;'>
+            <span style="font-size: 1.6rem;">🤖</span> פרומפט לשליחה למודל
+        </h3>
+        <p style='color: #64748B; font-size: 1rem; margin-top: 5px;'>לחץ על סמל ההעתקה בצד שמאל למעלה של התיבה כדי להעתיק את הפרומפט במלואו.</p>
+    </div>
+    """, unsafe_allow_html=True)
     
     # הצגת הפרומפט בתוך אלמנט קוד שיש לו כפתור "העתק" מובנה
     st.code(step_data['prompt'], language="markdown")
@@ -189,8 +268,9 @@ if client_selected == "קבוצת עזריאלי" and selected_step_key:
 else:
     if client_selected != "קבוצת עזריאלי":
         st.markdown("""
-        <div style='text-align: center; margin-top: 100px;'>
-            <h1 style='color: #0F172A;'>🚧 אזור בבנייה</h1>
-            <p style='color: #64748B; font-size: 1.2rem;'>הפלייבוק הייעודי ללקוח זה יוטמע במערכת בקרוב. אנא בחר ב'קבוצת עזריאלי' כדי לראות את סביבת העבודה הפעילה.</p>
+        <div style='text-align: center; margin-top: 120px; background-color: #FFFFFF; padding: 60px; border-radius: 20px; border: 1px dashed #CBD5E1; max-width: 600px; margin-left: auto; margin-right: auto;'>
+            <span style='font-size: 64px;'>🚧</span>
+            <h1 style='color: #0F172A; font-weight: 800; margin-top: 20px;'>אזור בבנייה</h1>
+            <p style='color: #64748B; font-size: 1.1rem; line-height: 1.6; margin-top: 15px;'>הפלייבוק הייעודי ללקוח זה יוטמע במערכת בקרוב. אנא בחר ב<strong>'קבוצת עזריאלי'</strong> מתפריט הצד כדי לראות את סביבת העבודה הפעילה.</p>
         </div>
         """, unsafe_allow_html=True)
